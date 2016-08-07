@@ -1,3 +1,3 @@
 # receipt-checker
-Check your receipts for prizes.
+Check your receipts for prizes. 
 Powered by Django.
