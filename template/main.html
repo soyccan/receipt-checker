@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    {% load staticfiles %}
+    <meta charset='utf-8'>
+    <meta name='viewport' content='width=device-width, initial-scale=1'>
+    <title>統一發票對獎機</title>
+    <link rel='stylesheet' href='//fonts.googleapis.com/css?family=Noto+Sans'>
+    <link rel='stylesheet' href='//fonts.googleapis.com/icon?family=Material+Icons'>
+    <link rel='stylesheet' href='//maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css'>
+    <link rel='stylesheet' href='{% static "main.css" %}'>
+    <script src='//code.jquery.com/jquery-2.1.4.min.js'></script>
+    <script src='//maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js'></script>
+    <script src='{% static "main.js" %}'></script>
+    <script>
+      var winNum = {{ last_win_num|safe }};
+    </script>
+  </head>
+
+  <body class='container'>
+    <nav>
+      <ul class='nav nav-tabs'>
+        <li class='active'>
+          <a data-toggle='tab' href='#check' id='check-link'>對獎</a>
+        </li>
+        <li><a data-toggle='tab' href='#set' id='set-link'>自訂中獎號碼</a></li>
+        <li><a data-toggle='tab' href='#history' id='history-link'>記錄</a></li>
+        <li><a data-toggle='tab' href='#about' id='about-link'>製作</a></li>
+        <li><a href='//invoice.etax.nat.gov.tw' target='_blank'>開獎網站</a></li>
+        <li>
+          <select id='date' name='date'>
+            {% for date in date_list %}
+              <option>{{ date }}</option>
+            {% endfor %}
+            <option value='custom'>自訂</option>
+          </select>
+        </li>
+      </ul>
+    </nav>
+
+    <main class='well tab-content col-xs-12 col-sm-10 col-md-8 col-lg-6'>
+      <section id='check' class='tab-pane fade in active'>
+        <div class='col-xs-8'>
+          <label for='num-entry'>統一發票末三碼：</label>
+          <div class='form-group has-feedback'>
+            <input type='text' class='form-control' id='num-entry' autofocus>
+            <i class='material-icons form-control-feedback'
+               id='num-error'>error</i>
+          </div>
+          <samp id='result'>統一發票對獎機</samp>
+        </div>
+        <div class='col-xs-4 text-center'>
+          <i class='material-icons' id='mood'
+             title='恭喜' data-placement='bottom'>mood</i>
+          <i class='material-icons' id='mood-bad'
+             title='可惜' data-placement='bottom'>mood_bad</i>
+        </div>
+      </section>
+
+      <section id='set' class='tab-pane fade'>
+        <label for='add-entry'>中獎號碼八碼或三碼：</label>
+        <div class='form-group has-feedback'>
+          <input type='text' class='form-control' id='add-entry'>
+          <i id='add-error' class='material-icons form-control-feedback'>
+            error
+          </i>
+        </div>
+        <select class='col-xs-8' id='set-select' multiple></select>
+        <div class='btn-group-vertical col-xs-4'>
+          <button
+              id='add' title='添'
+              data-placement='right'
+              class='btn btn-primary btn-block'>
+            <i class='material-icons'>add_circle</i>
+          </button>
+          <button
+              id='del' title='去'
+              data-placement='right'
+              class='btn btn-primary btn-block'>
+            <i class='material-icons'>remove_circle</i>
+          </button>
+          <button
+              id='clear' title='空'
+              data-placement='right'
+              class='btn btn-primary btn-block'>
+            <i class='material-icons'>clear</i>
+          </button>
+        </div>
+      </section>
+
+      <section id='history' class='tab-pane fade'>
+        <i class='material-icons' title='空空如也'>history</i>
+        <div>
+          <button class='btn btn-danger' id='forget' title='忘'>
+            <i class='material-icons'>clear</i>
+          </button>
+          <ul class='list-group' id='record'></ul>
+        </div>
+      </section>
+
+      <section id='about' class='tab-pane fade'>
+        <p lang='zh-tw'>陳正康於民國104年暑假作品</p>
+        <p lang='en'>
+          Created by Chen Cheng-Kang<br>
+          during summer vacation, 2015
+        </p>
+        <address id='email'>chengkongtw@gmail.com</address>
+        <a href='//www.w3.org/html/logo/'>
+          <img
+              src='//www.w3.org/html/logo/badge/html5-badge-h-css3-performance-semantics-storage.png'
+              alt='HTML5 Powered with CSS3 / Styling, Performance &amp; Integration, Semantics, and Offline &amp; Storage'
+              title='HTML5 Powered with CSS3 / Styling, Performance &amp; Integration, Semantics, and Offline &amp; Storage'
+              data-placement='right'>
+        </a>
+      </section>
+    </main>
+
+    <div id='next-check' class='modal fade' role='dialog'>
+      <div class='modal-dialog'>
+        <div class='modal-content'>
+          <header class='modal-header'>
+            <h1>接下來</h1>
+            <h2>看看中了什麼獎</h2>
+          </header>
+
+          <main class='modal-body'>
+            <div class='form-group'>
+              <label for='full-entry'>請完整輸入發票八碼：</label>
+              <input type='text' class='form-control' id='full-entry' autofocus>
+            </div>
+
+            <div class='form-group'>
+              <label for='hope'>希望中多少錢？</label><br>
+              <select id='hope' class='form-control'>
+                <option>特別獎 1,000 萬元</option>
+                <option>特獎 200 萬元</option>
+                <option>頭獎 20 萬元</option>
+                <option>二獎 4 萬元</option>
+                <option>三獎 1 萬元</option>
+                <option>四獎 4 千元</option>
+                <option>五獎 1 千元</option>
+                <option>六獎 2 百元</option>
+              </select>
+            </div>
+
+            <p>祝你中大獎</p>
+          </main>
+
+          <footer class='modal-footer'>
+            <button type='submit' id='ok' class='btn btn-default'>好</button>
+          </footer>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>

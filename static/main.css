@@ -1,0 +1,57 @@
+@font-face {
+  /* TODO: load font after page */
+  font-family: 'Noto Sans TC';
+  src: local('Noto Sans TC'),
+       url(//github.com/googlei18n/noto-cjk/raw/master/NotoSansTC-Regular.otf),
+       url(NotoSansTC-Regular.otf);
+}
+
+@font-face {
+  font-family: 'Noto Sans TC';
+  src: local('Noto Sans TC Bold'),
+       url(//github.com/googlei18n/noto-cjk/raw/master/NotoSansTC-Bold.otf),
+       url(NotoSansTC-Bold.otf);
+  font-weight: bold;
+}
+
+body {
+  font: 5mm/2 'Noto Sans', 'Noto Sans TC', sans-serif;
+  margin-top: 3mm;
+  min-width: 400px;
+}
+
+* {
+  outline: 0 !important;
+}
+
+i {
+  text-align: center;
+  vertical-align: middle;
+}
+
+button > i {
+  font-size: 8mm !important;
+}
+
+samp {
+  font: inherit;
+}
+
+/*
+footer {
+  padding: 1mm;
+  font-size: 1mm;
+  text-align: right;
+  position: absolute;
+  bottom: 0;
+  right: 0;
+}
+
+#mood, #mood-bad, #no-found, #num-error, #add-error {
+  display: none;
+}
+*/
+
+#mood, #mood-bad, #history > i {
+  font-size: 30mm;
+}

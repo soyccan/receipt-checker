@@ -1,0 +1,18 @@
+HTML5 & Javascript, Receipt Checker:
+undo
+- if match 3 digit, require entering full number
+- record input numbers
+- catch winning numbers from Net
+program in a small browser window (panel)
+separate two kinds of number, full (8) and short (3)
+show current and last month
+- manually set winning numbers when can't get them on Net
+different word in result, random
+- open website in frame
+- alternate text when material icon font doesn't load
+embed fonts
+merge two 'check' function
+auto update winning number on schedule
+
+
+'-': done
