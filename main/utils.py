@@ -34,14 +34,19 @@ class _JSONEncoder(JSONEncoder):
 _json_encoder = _JSONEncoder()
 
 class Event:
-    """datecode: 7-lengthed string, for example, 0880908"""
+    """datecode: 5-lengthed string, for example,
+       08809 means september of year 88"""
     @classmethod
     def fromdate(cls, date: datetime.date):
         cls.year = date.year - 1911
+        cls.begin_month = date.month - 2
         if date.day < 25:
-            cls.begin_month = (date.month + 9 - date.month%2) % 12
-        else:
-            cls.begin_month = (date.month + 9 + date.month%2) % 12
+            cls.begin_month -= 2
+        if date.month % 2 == 0:
+            cls.begin_month -= 1
+        if cls.begin_month <= 0:
+            cls.year -= 1
+            cls.begin_month += 12
         cls.end_month = cls.begin_month + 1
         cls.datecode = '{:03}{:02}'.format(cls.year, cls.begin_month)
         return cls()
@@ -115,14 +120,17 @@ def format_date(datecode: str) -> str:
 def fetch_winnum(event: Event) -> Sequence[Dict]:
     # 財政部網站
     tree = html.parse(urlopen(
-        'https://www.etax.nat.gov.tw/etw-main/front/ETW183W2_'+event.datecode,
+        'https://www.etax.nat.gov.tw/etw-main/web/ETW183W2_'+event.datecode,
         context=ssl._create_unverified_context()))
 
     result = []
-    for span in tree.iterfind('//span[@class="t18Red"]'):
-        for number in span.text.split('、'): # 頓號 ideographic comma
+    table = tree.find('//table')
+    for i in (3,5,7,19):
+        prizetype = table[i].find('tr/th').text
+        nums = table[i+1].find('tr/td/span').text
+        for num in nums.split('、'): # 頓號 ideographic comma
             result.append({
                 'datecode': event.datecode,
-                'prizetype': Prize.objects.get(name=span.find('../../th').text),
-                'number': number})
+                'prizetype': Prize.objects.get(name=prizetype),
+                'number': num})
     return result

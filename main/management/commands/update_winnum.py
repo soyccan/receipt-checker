@@ -10,8 +10,15 @@ from main.utils import Event
 
 
 class Command(BaseCommand):
+    def add_arguments(self, parser):
+        parser.add_argument('datecode', nargs='?')
+
     def handle(self, *args, **options):
-        event = Event.fromdate(datetime.date.today())
+        if options['datecode']:
+            event = Event.fromdatecode(options['datecode'])
+        else:
+            event = Event.fromdate(datetime.date.today())
+
         if WinNum.objects.filter(datecode=event.datecode):
             print('Up-to-date:', event)
         else:
