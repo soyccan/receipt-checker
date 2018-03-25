@@ -129,12 +129,12 @@ def fetch_winnum(event: Event) -> Sequence[Dict]:
 
     result = []
     trs = tree.findall('//table/tbody/tr')
-    for i in (1,3,5,7,8,9):
+    for i in (1,3,5,12):
         prizetype = trs[i].find('th').text
         nums = trs[i].find('td').text
         for num in nums.split('、'): # 頓號 ideographic comma
             result.append({
                 'datecode': event.datecode,
                 'prizetype': Prize.objects.get(name=prizetype),
-                'number': num})
+                'number': num.strip()})
     return result

@@ -14,6 +14,13 @@
     <script src='{% static "main.js" %}'></script>
     <script>
       var winNum = {{ last_win_num|safe }};
+	  $(function() {
+        $.get(
+          'win-num/',
+          { 'datecode' : $('#date').val() },
+          function(data) { winNum = data; }
+        );
+      });
     </script>
   </head>
 
