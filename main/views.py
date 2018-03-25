@@ -1,4 +1,6 @@
-from django.http import HttpResponse
+import re
+
+from django.http import HttpResponse, Http404
 from django.shortcuts import render
 
 from main.models import Prize
@@ -9,17 +11,19 @@ from main.utils import Event
 
 
 def load(request):
-    date_list = (WinNum.objects
-        .values_list('datecode', flat=True)
-        .order_by('-datecode')
-        .distinct())
+    date_list = []
+    for datecode in (WinNum.objects
+          .values_list('datecode', flat=True)
+          .order_by('-datecode')
+          .distinct()):
+        date_list.append((format_date(datecode), datecode))
 
     last_win_num = (WinNum.objects
         .filter(datecode=date_list[0])
         .values_list('number', flat=True))
 
     return render(request, 'main.html', {
-        'date_list': map(format_date, date_list),
+        'date_list': date_list,
         'last_win_num': encode_json(last_win_num)
     })
 
@@ -27,7 +31,7 @@ def win_num(request):
     return HttpResponse(
         encode_json(
             WinNum.objects
-            .filter(datecode=Event.fromstring(request.GET['date']).datecode)
+            .filter(datecode=request.GET['datecode'])
             .values_list('number', flat=True)),
         content_type='application/json')
 
@@ -35,7 +39,10 @@ def full_check(request):
     # TODO: simplify
     result = None
     num = request.GET['num']
-    datecode = Event.fromstring(request.GET['date']).datecode
+    datecode = request.GET['datecode']
+    if not re.match(r'\d{8}', num) or not re.match(r'\d{5}', datecode):
+        raise Http404("Internal Error")
+
     for win_num in WinNum.objects.filter(datecode=datecode):
         if (win_num.prizetype.name in ('特別獎', '特獎', '頭獎')
                 and num == win_num.number):
@@ -57,7 +64,7 @@ def full_check(request):
     if result:
         return HttpResponse(encode_json({
             'prizeName': result.name,
-            'prizeValue': result.value
+            'prizeValue': '{:,}'.format(result.value)
         }), content_type='application/json')
     else:
-        return HttpResponse(None, content_type='text/plain')
+        raise Http404("Internal Error")

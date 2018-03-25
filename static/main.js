@@ -171,7 +171,7 @@ $(function() {
         'full-check/',
         {
           'num': $('#full-entry').val(),
-          'date': $('#date').val()
+          'datecode': $('#date').val()
         },
         function(data) {
           if (data) {
@@ -199,7 +199,7 @@ $(function() {
     } else {
       $.get(
         'win-num/',
-        { 'date' : $('#date').val() },
+        { 'datecode' : $('#date').val() },
         function(data) { winNum = data; }
       );
     }

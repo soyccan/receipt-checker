@@ -1,6 +1,6 @@
 #!/usr/bin/python3
 
-import datetime
+import datetime, sys
 
 from django.core.management.base import BaseCommand
 
@@ -19,10 +19,18 @@ class Command(BaseCommand):
         else:
             event = Event.fromdate(datetime.date.today())
 
+        if not event:
+            print('ERROR!')
+            return False
+
         if WinNum.objects.filter(datecode=event.datecode):
             print('Up-to-date:', event)
         else:
             print('Updating:', event)
-            for winnum in fetch_winnum(event):
-                WinNum.objects.create(**winnum)
+            try:
+                for winnum in fetch_winnum(event):
+                    WinNum.objects.create(**winnum)
+            except Exception as e:
+                print(sys.exc_info())
+                return False
             print('Success!')

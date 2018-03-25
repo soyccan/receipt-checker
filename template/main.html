@@ -29,8 +29,8 @@
         <li><a href='//invoice.etax.nat.gov.tw' target='_blank'>開獎網站</a></li>
         <li>
           <select id='date' name='date'>
-            {% for date in date_list %}
-              <option>{{ date }}</option>
+            {% for datestr, datecode in date_list %}
+              <option value='{{ datecode }}'>{{ datestr }}</option>
             {% endfor %}
             <option value='custom'>自訂</option>
           </select>

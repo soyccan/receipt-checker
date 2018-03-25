@@ -40,7 +40,7 @@ class Event:
     def fromdate(cls, date: datetime.date):
         cls.year = date.year - 1911
         cls.begin_month = date.month - 2
-        if date.day < 25:
+        if date.month % 2 == 1 and date.day < 25:
             cls.begin_month -= 2
         if date.month % 2 == 0:
             cls.begin_month -= 1
@@ -53,6 +53,8 @@ class Event:
 
     @classmethod
     def fromdatecode(cls, datecode: str):
+        if not re.match(r'\d{3}(01|03|05|07|09|11)', datecode):
+            return
         cls.datecode = datecode
         cls.year = int(datecode[0:3])
         cls.begin_month = int(datecode[3:5])
@@ -64,6 +66,8 @@ class Event:
         (cls.year,
          cls.begin_month,
          cls.end_month) = map(int, re.findall(r'\d+', datestr))
+        if cls.begin_month % 2 == 0 or cls.begin_month > 12:
+            return
         if cls.year > 1911:
             cls.year -= 1911
         cls.datecode = '{:03}{:02}'.format(cls.year, cls.begin_month)
@@ -124,10 +128,10 @@ def fetch_winnum(event: Event) -> Sequence[Dict]:
         context=ssl._create_unverified_context()))
 
     result = []
-    table = tree.find('//table')
-    for i in (3,5,7,19):
-        prizetype = table[i].find('tr/th').text
-        nums = table[i+1].find('tr/td/span').text
+    trs = tree.findall('//table/tbody/tr')
+    for i in (1,3,5,7,8,9):
+        prizetype = trs[i].find('th').text
+        nums = trs[i].find('td').text
         for num in nums.split('、'): # 頓號 ideographic comma
             result.append({
                 'datecode': event.datecode,
