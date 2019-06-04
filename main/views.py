@@ -19,7 +19,7 @@ def load(request):
         date_list.append((format_date(datecode), datecode))
 
     last_win_num = (WinNum.objects
-        .filter(datecode=date_list[0])
+        .filter(datecode=date_list[:0])
         .values_list('number', flat=True))
 
     return render(request, 'main.html', {

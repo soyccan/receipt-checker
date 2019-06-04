@@ -25,6 +25,8 @@ DEBUG = True
 #TEMPLATE_DEBUG = True
 
 ALLOWED_HOSTS = []
+if DEBUG:
+    ALLOWED_HOSTS.append('10.0.0.10')
 
 
 # Application definition
@@ -39,12 +41,12 @@ INSTALLED_APPS = (
     'main',
 )
 
-MIDDLEWARE_CLASSES = (
+MIDDLEWARE = (
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
-    'django.contrib.auth.middleware.SessionAuthenticationMiddleware',
+#    'django.contrib.auth.middleware.SessionAuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 )
@@ -84,6 +86,8 @@ USE_TZ = True
 STATIC_URL = '/receipt-checker/static/'
 
 STATIC_ROOT = os.path.join(BASE_DIR, 'collectstatic')
+
+STATICFILES_DIRS = (os.path.join(BASE_DIR, 'static'),)
 
 TEMPLATES = (
     {

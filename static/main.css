@@ -1,18 +1,4 @@
-@font-face {
-  /* TODO: load font after page */
-  font-family: 'Noto Sans TC';
-  src: local('Noto Sans TC'),
-       url(//github.com/googlei18n/noto-cjk/raw/master/NotoSansTC-Regular.otf),
-       url(NotoSansTC-Regular.otf);
-}
-
-@font-face {
-  font-family: 'Noto Sans TC';
-  src: local('Noto Sans TC Bold'),
-       url(//github.com/googlei18n/noto-cjk/raw/master/NotoSansTC-Bold.otf),
-       url(NotoSansTC-Bold.otf);
-  font-weight: bold;
-}
+@import url('https://fonts.googleapis.com/css?family=Noto+Sans+TC');
 
 body {
   font: 5mm/2 'Noto Sans', 'Noto Sans TC', sans-serif;

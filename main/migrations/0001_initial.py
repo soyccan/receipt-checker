@@ -25,7 +25,7 @@ class Migration(migrations.Migration):
                 ('id', models.AutoField(verbose_name='ID', auto_created=True, primary_key=True, serialize=False)),
                 ('date', models.TextField()),
                 ('number', models.TextField()),
-                ('type', models.ForeignKey(to='main.Prize')),
+                ('type', models.ForeignKey(to='main.Prize', on_delete=models.CASCADE)),
             ],
         ),
     ]
